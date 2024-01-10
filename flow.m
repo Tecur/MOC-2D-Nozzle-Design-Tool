@@ -1,11 +1,11 @@
 %% Calculates Flow Properties for the given mach Number
 function u=flow(handles)
-G=str2num(get(handles.gamma,'string'));
+G=str2double(get(handles.gamma,'string'));
 if isempty(G)
   G = 1.4;
 end
-Me=str2num(get(handles.Input,'string'));
-n=str2num(get(handles.waves,'string'));
+Me=str2double(get(handles.Input,'string'));
+n=str2double(get(handles.waves,'string'));
 if isempty(n)
   n =16;
 end

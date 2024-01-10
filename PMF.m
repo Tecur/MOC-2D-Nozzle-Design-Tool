@@ -4,7 +4,7 @@ Gp=G+1;
 Gm=G-1;
 
 % for known M
-if M~=0;
+if M~=0
 
     nu = sqrt(Gp/Gm).*atand(sqrt(Gm*(M.^2-1)/Gp))-atand(sqrt(M.^2-1));
 
@@ -12,7 +12,7 @@ if M~=0;
     
 
 % for known nu
-elseif norm(nu)~=0;
+elseif norm(nu)~=0
     
     % Find M
         
@@ -29,7 +29,7 @@ elseif norm(nu)~=0;
     
     
 % for known mu
-elseif mu~=0;
+elseif mu~=0
     
     M=1./sind(mu);
     

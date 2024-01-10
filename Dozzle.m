@@ -1,11 +1,11 @@
 function l=Dozzle(handles)
 
-G=str2num(get(handles.gamma,'string')); %Specific heat Ratio
+G=str2double(get(handles.gamma,'string')); %Specific heat Ratio
 if isempty(G)
  G = 1.4;
 end
-Me=str2num(get(handles.Input,'string')); %exit Mach Number
-n=str2num(get(handles.waves,'string'));  %finite Number of Waves used for calculation
+Me=str2double(get(handles.Input,'string')); %exit Mach Number
+n=str2double(get(handles.waves,'string'));  %finite Number of Waves used for calculation
 if isempty(n)
   n =16;
 end
@@ -35,9 +35,9 @@ y0 = 1; % Define throat half-height
 if get(handles.enter,'value')==1
 ThroatCurveRadius =0;
 else
-cr=str2num(get(handles.edit4,'string')); %get radius multiplier from user
+cr=str2double(get(handles.edit4,'string')); %get radius multiplier from user
     if isempty(cr)
-     cr =3;
+     cr =0.4;   % see Rocket Propulsion Elements
     end
     ThroatCurveRadius =cr*y0;  % Radius of curvature just downstream of the throat
 end
@@ -68,12 +68,12 @@ for i=2:n
 end
 
 %% Find flow properties at remaining interior nodes
-for j=2:n;
-    for i=1:n+1-j;
+for j=2:n
+    for i=1:n+1-j
         
         Km(i,j) = Km(i+1,j-1);
         
-        if i==1;
+        if i==1
             
             Theta(i,j) = 0;
             Kp(i,j) = -Km(i,j);
@@ -126,25 +126,26 @@ assignin('caller','ywall',ywall) %store y coordinates in workspace
 
 if ThroatCurveRadius == 0
     q=[0 1 ;xwall((length(xwall)/2)+1:length(xwall),1) ywall((length(ywall)/2)+1:length(ywall),1)]; %store data to pass to GUI
-    t = xlsread('temp_data.xlsx');
+    t = readtable('temp_data.xlsx');
 if ~isempty(t)
-    xlswrite('temp_data.xlsx',zeros(size(t))*nan);
+    writematrix(zeros(size(t))*nan,'temp_data.xlsx');
 end
-xlswrite('temp_data.xlsx',q)
+writematrix(q,'temp_data.xlsx')
 else
     q=[0 1 ;xwall ywall]; %store data to pass to GUI
-t = xlsread('temp_ideal.xlsx');
+t = readtable('temp_ideal.xlsx');
 if ~isempty(t)
-    xlswrite('temp_ideal.xlsx',zeros(size(t))*nan);
+    writematrix(zeros(size(t))*nan,'temp_ideal.xlsx');
 end
 
-xlswrite('temp_ideal.xlsx',q) %write coordinate data to excel sheet
+writematrix(q,'temp_ideal.xlsx') %write coordinate data to excel sheet
 end
 %%
 % Draw contour and characteristic web
   if ThroatCurveRadius == 0
-  w=3;
-  else w=2;
+    w=3;
+  else 
+      w=2;
   end
   
   figure(w);clf(w);    hold on
